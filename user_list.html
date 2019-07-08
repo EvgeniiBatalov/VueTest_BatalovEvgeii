@@ -6,25 +6,56 @@
             display: none;
         }
     </style>
-    <div id="app" v-cloak>
-        <span v-bind:title="loaddate">
-            {{ message }}
-        </span>
-        <h4>Строк в таблице {{listlenght}}</h4>
-        <button class="btn btn-lg btn-bd-primary" v-on:click="outputdatamodechange()">{{outputdatamode}}</button>
+    <div class="container">
+        <div id="app" v-cloak>
+            <span v-bind:title="loaddate">
+                {{ message }}
+            </span>
+            <h4>Строк в таблице {{listlenght}}</h4>
+            <button class="btn btn-lg btn-bd-primary margin-bottom-10"
+                v-on:click="outputdatamodechange()">{{outputdatamode}}</button>
+
+            <section>
+                <table class="table table-bordered table-striped" v-if="showdata">
+                    <tr v-for="chel in list">
+                        <td>{{ chel.lastname }}</td>
+                        <td>{{ chel.name }}</td>
+                        <td>{{ chel.middlename }}</td>
+                        <td><img v-bind:src="chel.ava" style="max-height: 65px;" alt="Нет фото"></img></td>
+                        <!-- <td><img v-bind:src="getavapath(chel.ava)" style="max-height: 65px;"></img></td> -->
+                        <!-- <td><img v-bind:src="chel.ava.length > 0 ? chel.ava : https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn_1d9LnGP5Z2-B9AtrZanCR25Fu8bWicuek1C2Z4SvX3FrDtB" style="max-height: 65px;"></img></td> -->
+                    </tr>
+                </table>
+            </section>
+
+            <hr>
+
+            <users-list v-bind:xlist="list"></users-list>
+        </div>
+    </div>
+
+    <template id="tableUser">
         <section>
-            <table class="table" v-if="showdata">
-                <tr v-for="chel in list">
+            <table class="table">
+                <!--v-if="showdata"-->
+                <tr v-for="chel in xlist">
                     <td>{{ chel.lastname }}</td>
                     <td>{{ chel.name }}</td>
                     <td>{{ chel.middlename }}</td>
                     <td><img v-bind:src="chel.ava" style="max-height: 65px;" alt="Нет фото"></img></td>
+                    <!-- <td>
+                            <img v-if="chel.ava!=null" v-bind:src="chel.ava" style="max-height: 65px;"
+                                alt="Нет фото"></img>
+                            <img v-else
+                                v-bind:src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn_1d9LnGP5Z2-B9AtrZanCR25Fu8bWicuek1C2Z4SvX3FrDtB"
+                                style="max-height: 65px;" alt="Нет фото"></img>
+                        </td> -->
                     <!-- <td><img v-bind:src="getavapath(chel.ava)" style="max-height: 65px;"></img></td> -->
                     <!-- <td><img v-bind:src="chel.ava.length > 0 ? chel.ava : https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn_1d9LnGP5Z2-B9AtrZanCR25Fu8bWicuek1C2Z4SvX3FrDtB" style="max-height: 65px;"></img></td> -->
                 </tr>
             </table>
         </section>
-    </div>
+    </template>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
@@ -32,15 +63,32 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
     <!-- <script src="code.js"></script> -->
     <script>
-        var app = new Vue({
+        window.vm = new Vue({
             el: '#app',
+            components: {
+                'users-list': {
+                    template: '#tableUser',
+                    props: {
+                        xlist: {
+                            type: Array,
+                            require: true //должна быть всегда
+                        }
+                    }
+                }
+            },
             data: {
                 message: 'Привет, Vue!',
                 loaddate: 'Вы загрузили эту страницу: ' + new Date().toLocaleString(),
                 showdata: true,
                 list: []
             },
+            watch: {
+                showdata: {
+                    handler: 'userHandler'
+                }
+            },
             created: function () {
+                console.log('Запрос данных: ' + new Date().toLocaleString());
                 this.getusers()
             },
             computed: {
@@ -73,7 +121,11 @@
                         { "lastname": "Sidorov", "name": "Sidor", "middlename": "Sidorovich" },
                         { "lastname": "Antonov", "name": "Anton", "middlename": "Antonovich", "ava": "https://s00.yaplakal.com/pics/pics_original/4/6/4/10101464.jpg" },
                         { "lastname": "Stepanov", "name": "Stepan", "middlename": "Stepanovich", "ava": "https://i.ytimg.com/vi/6oCEhIDxiOE/hqdefault.jpg" }
-                    ]
+                    ];
+                    console.log('Список пользователей загружен: ' + new Date().toLocaleString());
+                },
+                userHandler: function () {
+                    console.log('Список пользователей загружен: ' + new Date().toLocaleString());
                 }
             }
         })

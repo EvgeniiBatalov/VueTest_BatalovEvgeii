@@ -1,0 +1,85 @@
+<html>
+<body>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    <div class="container">
+        <div id="app" v-cloak>
+            
+            <h4>Создание / Редактирование записи</h4>
+            <section>
+                <label>Фамилия</label>
+                <input type="text" class="form-control" name="lastname">
+            </section>
+            <section>
+                <label>Имя</label>
+                <input type="text" class="form-control" name="name">
+            </section>
+            <section>
+                <label>Отчество</label>
+                <input type="text" class="form-control" name="middlename">
+            </section>
+            <section>
+                <label>Путь к аватару</label>
+                <input type="text" class="form-control" name="ava">
+            </section>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <!-- <script src="code.js"></script> -->
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Привет, Vue!',
+                loaddate: 'Вы загрузили эту страницу: ' + new Date().toLocaleString(),
+                showdata: true,
+                list: []
+            },
+            created: function () {
+                this.getusers()
+            },
+            computed: {
+                outputdatamode: function () {
+                    return this.showdata ? 'Скрыть' : 'Показать'
+                },
+                listlenght: function () {
+                    return this.list.length
+                }
+            },
+            methods: {
+                outputdatamodechange: function () {
+                    this.showdata = !this.showdata;
+                },
+                getavapath: function (path) {
+                    var qty = path.ToString().length;
+                    if (qty > 0) {
+                        return path;
+                    }
+                    else {
+                        return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn_1d9LnGP5Z2-B9AtrZanCR25Fu8bWicuek1C2Z4SvX3FrDtB";
+                    }
+                },
+                getusers: function () {
+                    // let json = require('users.json');          
+                    // this.list=JSON.parse(json); 
+                    this.list = [
+                        { "lastname": "Ivanov", "name": "Ivan", "middlename": "Ivanovich", "ava": "https://avatars.mds.yandex.net/get-pdb/216365/eb43844b-51d6-41a0-86c0-0f3c47da5b48/s375" },
+                        { "lastname": "Petrov", "name": "Petr", "middlename": "Petrovich", "ava": "https://zabavnik.club/wp-content/uploads/Milye_kartinki_dlya_ld_1_06122128.jpg" },
+                        { "lastname": "Sidorov", "name": "Sidor", "middlename": "Sidorovich" },
+                        { "lastname": "Antonov", "name": "Anton", "middlename": "Antonovich", "ava": "https://s00.yaplakal.com/pics/pics_original/4/6/4/10101464.jpg" },
+                        { "lastname": "Stepanov", "name": "Stepan", "middlename": "Stepanovich", "ava": "https://i.ytimg.com/vi/6oCEhIDxiOE/hqdefault.jpg" }
+                    ]
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
